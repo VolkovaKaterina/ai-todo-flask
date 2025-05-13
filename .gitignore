@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.db
+instance/
+.env
+.env.*
+
+# Virtual env
+venv/
+
+# Editor
+.idea/
+.vscode/
+
+# Flask/Migrations
+migrations/__pycache__/
+*.log
+
+# OS
+.DS_Store

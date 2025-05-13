@@ -1,0 +1,120 @@
+{% extends "main_layout.html" %}
+{% block title %}Your Tasks{% endblock %}
+
+{% block script %}
+  {{ super() }}
+  <script src="{{ url_for('static', filename='js/todos.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/assistant.js') }}"></script>
+{% endblock %}
+
+{% block page_content %}
+<h1 class="title">📂 Your Tasks</h1>
+
+<div class="columns">
+  {% for status, tasks in [("NEW", new_tasks), ("IN_PROGRESS", in_progress_tasks), ("DONE", done_tasks)] %}
+    <div class="column">
+      <h2 class="subtitle">
+        {% if status == "NEW" %}🔀 New
+        {% elif status == "IN_PROGRESS" %}⏳ In Progress
+        {% else %}✅ Done
+        {% endif %}
+      </h2>
+
+      {% for task in tasks %}
+        <div class="box">
+          <strong>{{ task.title }}</strong>
+          <p>{{ task.description or "No description" }}</p>
+
+          {% if task.assistant_notes %}
+            <div class="mt-2">
+              <button class="button is-small is-link is-light" onclick="toggleAssistantNote({{ task.id }})">
+                💬 Show Assistant Note
+              </button>
+              <div id="assistant-note-{{ task.id }}" class="box has-background-light mt-1 is-hidden">
+                <strong>Assistant note:</strong>
+                <p>{{ task.assistant_notes }}</p>
+              </div>
+            </div>
+          {% endif %}
+
+          <div class="buttons mt-2">
+            <button class="button is-small is-info is-light" onclick="openEditModal({{ task.id }})">Edit</button>
+
+            <form method="POST" action="{{ url_for('main.delete_task', task_id=task.id) }}" style="display:inline">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button type="submit" class="button is-small is-danger is-light mr-2">Delete</button>
+            </form>
+
+            <button class="button is-small is-primary is-light" onclick="askAssistant({{ task.id }})">🤖 Assistant</button>
+          </div>
+
+          <!-- Assistant Modal -->
+          <div class="modal" id="assistant-modal-{{ task.id }}">
+            <div class="modal-background" onclick="closeAssistantModal({{ task.id }})"></div>
+            <div class="modal-card">
+              <header class="modal-card-head">
+                <p class="modal-card-title">Assistant for "{{ task.title }}"</p>
+                <button class="delete" type="button" onclick="closeAssistantModal({{ task.id }})"></button>
+              </header>
+              <section class="modal-card-body">
+                <p id="assistant-response-{{ task.id }}">{{ task.assistant_notes or "Loading assistant..." }}</p>
+
+                <div class="field mt-3">
+                  <label class="label">Your answer:</label>
+                  <textarea class="textarea" id="assistant-input-{{ task.id }}"></textarea>
+                </div>
+              </section>
+              <footer class="modal-card-foot">
+                <button class="button is-primary" onclick="sendAssistantReply({{ task.id }})">Send</button>
+                <button class="button" onclick="closeAssistantModal({{ task.id }})">Close</button>
+              </footer>
+            </div>
+          </div>
+
+          <!-- Edit Modal -->
+          <div class="modal" id="edit-modal-{{ task.id }}">
+            <div class="modal-background" onclick="closeEditModal({{ task.id }})"></div>
+            <div class="modal-card">
+              <form method="POST" action="{{ url_for('main.edit_task', task_id=task.id) }}">
+                <header class="modal-card-head">
+                  <p class="modal-card-title">Edit Task</p>
+                  <button class="delete" type="button" onclick="closeEditModal({{ task.id }})"></button>
+                </header>
+                <section class="modal-card-body">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                  <div class="field">
+                    <label class="label">Title</label>
+                    <input class="input" type="text" name="title" value="{{ task.title }}">
+                  </div>
+                  <div class="field">
+                    <label class="label">Description</label>
+                    <textarea class="textarea" name="description">{{ task.description }}</textarea>
+                  </div>
+                  <div class="field">
+                    <label class="label">Status</label>
+                    <div class="select">
+                      <select name="status">
+                        {% for s in ['NEW', 'IN_PROGRESS', 'DONE'] %}
+                        <option value="{{ s }}" {% if task.status.value == s %}selected{% endif %}>
+                          {{ s.replace('_', ' ').title() }}
+                        </option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                </section>
+                <footer class="modal-card-foot">
+                  <button type="submit" class="button is-success">Save</button>
+                  <button type="button" class="button" onclick="closeEditModal({{ task.id }})">Cancel</button>
+                </footer>
+              </form>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <p>No tasks</p>
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

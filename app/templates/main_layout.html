@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block style %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
+{% endblock %}
+
+{% block script %}
+  <script defer src="{{ url_for('static', filename='js/layout.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div style="display: flex; min-height: 100vh;">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar-expanded">
+      <div class="p-4">
+        <p class="menu-label has-text-grey-dark">Navigation</p>
+        <ul class="menu-list">
+          <li><a href="{{ url_for('main.todos') }}">📋 List of Todos</a></li>
+          <li><a href="{{ url_for('main.create_todo') }}">➕ Create Todo</a></li>
+        </ul>
+      </div>
+    </aside>
+  
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Header -->
+      <nav class="navbar is-white p-4 flex" role="navigation">
+        <div class="navbar-item">
+          <button class="button is-small" onclick="toggleSidebar()">☰</button>
+        </div>
+        <div class="navbar-menu is-active is-flex-grow-1 is-justify-content-flex-end is-align-items-center">
+          <div class="navbar-item">
+            👤 {{ current_user.name }}
+          </div>
+          <div class="navbar-item">
+            <a href="{{ url_for('main.logout') }}" class="button is-light is-small">Logout</a>
+          </div>
+        </div>
+      </nav>
+  
+      <!-- Page Content -->
+      <section class="section">
+        <div class="container">
+          {% block page_content %}{% endblock %}
+        </div>
+      </section>
+    </div>
+  </div>
+{% endblock %}
