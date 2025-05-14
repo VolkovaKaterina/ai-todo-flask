@@ -15,8 +15,16 @@
       <div class="p-4">
         <p class="menu-label has-text-grey-dark">Navigation</p>
         <ul class="menu-list">
-          <li><a href="{{ url_for('main.todos') }}">📋 List of Todos</a></li>
-          <li><a href="{{ url_for('main.create_todo') }}">➕ Create Todo</a></li>
+          <li><a href="{{ url_for('main.todos') }}">
+            <i class="fas fa-list"></i>
+            <span class="ml-2">List of Todos</span>
+          </a>
+          </li>
+          <li><a href="{{ url_for('main.create_todo') }}">
+            <i class="fas fa-plus"></i>
+            <span class="ml-2">Create Todo</span>
+            </a>
+          </li>
         </ul>
       </div>
     </aside>
@@ -26,11 +34,12 @@
       <!-- Header -->
       <nav class="navbar is-white p-4 flex" role="navigation">
         <div class="navbar-item">
-          <button class="button is-small" onclick="toggleSidebar()">☰</button>
+          <button class="button is-small" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
         </div>
         <div class="navbar-menu is-active is-flex-grow-1 is-justify-content-flex-end is-align-items-center">
           <div class="navbar-item">
-            👤 {{ current_user.name }}
+            <i class="fas fa-user"></i>
+            <div class="ml-2">{{ current_user.name }}</div>
           </div>
           <div class="navbar-item">
             <a href="{{ url_for('main.logout') }}" class="button is-light is-small">Logout</a>

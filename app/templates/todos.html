@@ -8,15 +8,15 @@
 {% endblock %}
 
 {% block page_content %}
-<h1 class="title">📂 Your Tasks</h1>
+<h1 class="title"><i class="fas fa-folder-open"></i> Your Tasks</h1>
 
 <div class="columns">
   {% for status, tasks in [("NEW", new_tasks), ("IN_PROGRESS", in_progress_tasks), ("DONE", done_tasks)] %}
     <div class="column">
       <h2 class="subtitle">
-        {% if status == "NEW" %}🔀 New
-        {% elif status == "IN_PROGRESS" %}⏳ In Progress
-        {% else %}✅ Done
+        {% if status == "NEW" %} <div class="has-text-link"><i class="fas fa-random has-text-link"></i> New</div>
+        {% elif status == "IN_PROGRESS" %}<div class="has-text-info"><i class="fas fa-hourglass-half"></i> In Progress</div>
+        {% elif status == "DONE" %}<div class="has-text-primary"><i class="fas fa-check"></i> Done</div>
         {% endif %}
       </h2>
 
@@ -28,7 +28,8 @@
           {% if task.assistant_notes %}
             <div class="mt-2">
               <button class="button is-small is-link is-light" onclick="toggleAssistantNote({{ task.id }})">
-                💬 Show Assistant Note
+                <i class="fas fa-lightbulb"></i> 
+                <span class="ml-2">Assistant Note</span> 
               </button>
               <div id="assistant-note-{{ task.id }}" class="box has-background-light mt-1 is-hidden">
                 <strong>Assistant note:</strong>
@@ -45,7 +46,10 @@
               <button type="submit" class="button is-small is-danger is-light mr-2">Delete</button>
             </form>
 
-            <button class="button is-small is-primary is-light" onclick="askAssistant({{ task.id }})">🤖 Assistant</button>
+            <button class="button is-small is-primary is-light" onclick="askAssistant({{ task.id }})">
+              <i class="fas fa-robot"></i> 
+              <span class="ml-2">Ask Assistant</span>
+             </button>
           </div>
 
           <!-- Assistant Modal -->

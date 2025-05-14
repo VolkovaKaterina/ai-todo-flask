@@ -3,7 +3,14 @@
 AI-powered ToDo web app built with **Flask**, **SQLAlchemy**, **Flask-Login**, **Bulma** CSS, and **OpenAI Assistant** integration.
 
 ---
-
+## Me: 
+ * GitHub name:  VolkovaKaterina
+ * edX: KV_2502_HG4X
+Poland, Wroclaw
+## Demo: 
+* recorded 14/05/24
+* https://youtu.be/e68dpjnuR7o
+---
 ## Features
 
 * Register / Login
